@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use('js', express.static(__dirname + '/public/js'));
+app.use('css', express.static(__dirname + '/public/css'));
 
 mongoose.connect(config.db.connectionString)
   .catch(err => console.error(err));
