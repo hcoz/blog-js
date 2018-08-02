@@ -2,6 +2,7 @@ const path = require('path');
 
 const auth = require('./api/auth');
 const post = require('./api/post');
+const user = require('./api/user');
 
 module.exports = (app) => {
   app.get('/', (req, res) => {
@@ -15,4 +16,5 @@ module.exports = (app) => {
   app.post('/api/login', auth.login);
   app.post('/api/register', auth.register);
   app.post('/api/post/publish', post.publish);
+  app.get('/api/userlist', user.userList);
 };

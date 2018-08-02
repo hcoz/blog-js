@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-var postSchema = new Schema({
+const postSchema = new Schema({
   privacy: String,
   username: String,
   postHeader: String,
@@ -9,6 +9,6 @@ var postSchema = new Schema({
   date: Date
 });
 
-var Posts = mongoose.model('Post', postSchema);
+const Posts = mongoose.model('Post', postSchema);
 
 module.exports = Posts;
