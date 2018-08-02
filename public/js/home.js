@@ -12,13 +12,15 @@ $(function () {
 
       for (let i in userList) {
         $('.js-user-list').append('<li class="nav-item"><a class="nav-link" href="#" data-userid="' +
-          userList[i]._id +
-          '"><span data-feather="user-plus"></span>' +
-          userList[i].username +
+          userList[i].user._id +
+          '"><span data-feather="' +
+          (userList[i].isFollow ? 'user-minus' : 'user-plus') +
+          '"></span>' +
+          userList[i].user.follower +
           '</a></li>');
       }
       // initialize icons
-      feather.replace();
+      window.feather.replace();
     })
     .fail(function (err) {
       if (err.responseJSON.redirect)

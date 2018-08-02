@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const config = require('../../config');
+const errorHandlers = require('../helpers/error-handler');
 const Post = require('../models/Post');
 
 exports.publish = async (req, res, next) => {
@@ -25,23 +26,11 @@ exports.publish = async (req, res, next) => {
     });
     let saveResult = await newPost.save();
 
-    if (saveResult.errors) {
+    if (saveResult.errors)
       res.status(401).json({ 'message': 'Post can\'t be published. Please try again' });
-      return next();
-    } else {
+    else
       res.status(200).json({ 'message': 'Your post is published' });
-      return next();
-    }
   } catch (err) {
-    console.error(err);
-
-    if (err.name === 'TokenExpiredError') {
-      res.status(401).json({ 'message': 'Your session is expired, need to login again.', 'redirect': '/' });
-      return next();
-    }
-    else {
-      res.status(400).json({ 'message': 'An error occured' });
-      return next();
-    }
+    errorHandlers.catchError(err, res);
   }
 };
