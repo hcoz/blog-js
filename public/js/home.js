@@ -11,12 +11,11 @@ $(function () {
       let userList = data.userList;
 
       for (let i in userList) {
-        $('.js-user-list').append('<li class="nav-item"><a class="nav-link" href="#" data-userid="' +
-          userList[i].user._id +
-          '"><span data-feather="' +
-          (userList[i].isFollow ? 'user-minus' : 'user-plus') +
+        $('.js-user-list').append('<li class="nav-item"><a class="nav-link js-list-user" href="#" data-username="' +
+          userList[i].userName +
+          (userList[i].isFollow ? '" data-following="true"><span data-feather="user-minus' : '" data-following="false"><span data-feather="user-plus') +
           '"></span>' +
-          userList[i].user.follower +
+          userList[i].userName +
           '</a></li>');
       }
       // initialize icons
@@ -33,6 +32,7 @@ $(function () {
   $('.js-show-post-form').click(function () {
     $('.js-create-post').toggle('slow');
   });
+
   // submit publish post form
   $('#publish').submit(function (e) {
     e.preventDefault();
@@ -59,4 +59,51 @@ $(function () {
       });
   });
 
+  // follow/unfollow event
+  $('.js-user-list').on('click', '.js-list-user', function (e) {
+    e.preventDefault();
+    $(this).data('following') === false ? follow($(this).data('username')) : unfollow($(this).data('username'));
+  });
 });
+
+function follow(userName) {
+  $.ajax({
+    type: 'POST',
+    url: '/api/follow',
+    headers: {
+      'Authorization': window.localStorage.getItem('token')
+    },
+    data: { follow: userName }
+  })
+    .done(function (data) {
+      $('.js-user-list .js-list-user[data-username=' + data.userName + ']')
+        .data('following', data.isFollow)
+        .empty()
+        .append('<span data-feather="user-minus"></span>' + data.userName);
+      window.feather.replace();
+    })
+    .fail(function (err) {
+      console.error(err);
+    });
+}
+
+function unfollow(userName) {
+  $.ajax({
+    type: 'POST',
+    url: '/api/unfollow',
+    headers: {
+      'Authorization': window.localStorage.getItem('token')
+    },
+    data: { unfollow: userName }
+  })
+    .done(function (data) {
+      $('.js-user-list .js-list-user[data-username=' + data.userName + ']')
+        .data('following', data.isFollow)
+        .empty()
+        .append('<span data-feather="user-plus"></span>' + data.userName);
+      window.feather.replace();
+    })
+    .fail(function (err) {
+      console.error(err);
+    });
+}
