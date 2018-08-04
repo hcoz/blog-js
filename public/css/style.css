@@ -57,6 +57,10 @@ body {
   color: inherit;
 }
 
+.sidebar .following {
+  background-color: #8ee4af;
+}
+
 .sidebar-heading {
   font-size: .75rem;
   text-transform: uppercase;
@@ -73,6 +77,13 @@ body {
 /*
  * Navbar
  */
+.navbar-nav {
+  flex-direction: row;
+}
+
+.navbar-nav .nav-item {
+  margin: 0 10px 0 10px;
+}
 
 .navbar-brand {
   padding-top: .75rem;
