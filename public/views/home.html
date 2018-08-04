@@ -15,17 +15,21 @@
 
 <body>
   <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Blog</a>
-    <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
-        <a class="nav-link" href="#">Sign out</a>
-      </li>
-    </ul>
+    <div class="col-xs-4">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Blog</a>
+    </div>
+    <div class="col-xs-8">
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link js-logout" href="#">Logout</a>
+        </li>
+      </ul>
+    </div>
   </nav>
 
   <div class="container-fluid">
     <div class="row">
-      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="col-md-2 d-none d-md-block bg-light sidebar js-sidebar">
         <div class="sidebar-sticky">
           <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>Users</span>
@@ -37,13 +41,13 @@
             <!-- user list will be in here-->
           </ul>
         </div>
-      </nav>
+      </div>
 
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">Home</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
-            <button class="btn btn-sm btn-outline-secondary js-show-post-form">
+            <button class="btn btn-sm btn-outline-secondary js-toggle-post-form" type="button">
               New post
             </button>
           </div>
@@ -74,6 +78,10 @@
               <p class="js-message-publish" class="text-danger"></p>
             </div>
           </form>
+        </div>
+
+        <div class="js-post-list">
+          <!-- post list will be in here-->
         </div>
       </main>
     </div>

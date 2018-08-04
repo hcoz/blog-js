@@ -19,4 +19,5 @@ module.exports = (app) => {
   app.post('/api/follow', user.follow);
   app.post('/api/unfollow', user.unfollow);
   app.get('/api/userlist', user.userList);
+  app.get('/api/postlist', post.postList);
 };

@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../../config');
 const errorHandlers = require('../helpers/error-handler');
 const Post = require('../models/Post');
+const Follower = require('../models/Follower');
 
 exports.publish = async (req, res, next) => {
   let postPrivacy = req.body.privacy;
@@ -30,6 +31,19 @@ exports.publish = async (req, res, next) => {
       res.status(401).json({ 'message': 'Post can\'t be published. Please try again' });
     else
       res.status(200).json({ 'message': 'Your post is published' });
+  } catch (err) {
+    errorHandlers.catchError(err, res);
+  }
+};
+
+exports.postList = async (req, res) => {
+  let token = req.headers.authorization;
+  try {
+    let verified = await jwt.verify(token, config.jwt.secretKey);
+    let followList = await Follower.findOne({ 'follower': verified.username }, 'follows');
+    let postList = await Post.find({ 'username': followList.follows, 'privacy': 'public' });
+
+    res.status(200).json({ 'postList': postList });
   } catch (err) {
     errorHandlers.catchError(err, res);
   }

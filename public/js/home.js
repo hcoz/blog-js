@@ -22,17 +22,49 @@ $(function () {
       window.feather.replace();
     })
     .fail(function (err) {
+      console.error(err);
+
       if (err.responseJSON.redirect)
         window.location = err.responseJSON.redirect;
-      else
-        $('.js-message-publish').text(err.responseJSON.message);
+    });
+
+  // fill post list
+  $.ajax({
+    type: 'GET',
+    url: '/api/postlist',
+    headers: {
+      'Authorization': window.localStorage.getItem('token')
+    }
+  })
+    .done(function (data) {
+      console.log(data);
+      var postHtml = '';
+
+      $.each(data.postList, function (i, post) {
+        postHtml += '<div class="post" data-postid=' + post._id +'><h4>' + post.postHeader + '</h4>' + 
+          '<h6><span data-feather="clock"></span> Post by ' + post.username + ', ' + new Date(post.date).toLocaleDateString() + '.</h6>' +
+          '<p>' + post.postContent + '</p></div>';
+      });
+
+      $('.js-post-list').append(postHtml);
+      // intialize icons
+      window.feather.replace();
+    })
+    .fail(function (err) {
+      console.error(err);
+
+      if (err.responseJSON.redirect)
+        window.location = err.responseJSON.redirect;
     });
 
   // show/hide create post form
-  $('.js-show-post-form').click(function () {
-    $('.js-create-post').toggle('slow');
+  $('.js-toggle-post-form').click(function () {
+    $('.js-create-post').toggle();
+    $(this).text(function (i, text) {
+      return text.trim() === 'New post' ? 'Hide' : 'New post';
+    });
   });
-
+  
   // submit publish post form
   $('#publish').submit(function (e) {
     e.preventDefault();
@@ -64,6 +96,13 @@ $(function () {
     e.preventDefault();
     $(this).data('following') === false ? follow($(this).data('username')) : unfollow($(this).data('username'));
   });
+
+  // logout
+  $('.js-logout').click(function (e) {
+    e.preventDefault();
+    window.localStorage.removeItem('token');
+    window.location = '/';
+  });
 });
 
 function follow(userName) {
@@ -80,6 +119,7 @@ function follow(userName) {
         .data('following', data.isFollow)
         .empty()
         .append('<span data-feather="user-minus"></span>' + data.userName);
+      // intialize icons
       window.feather.replace();
     })
     .fail(function (err) {
@@ -101,6 +141,7 @@ function unfollow(userName) {
         .data('following', data.isFollow)
         .empty()
         .append('<span data-feather="user-plus"></span>' + data.userName);
+      // intialize icons
       window.feather.replace();
     })
     .fail(function (err) {
